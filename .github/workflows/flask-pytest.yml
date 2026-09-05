@@ -48,6 +48,25 @@ jobs:
           mkdir -p reports
           bandit -r appname -f json -o reports/bandit.json || true
 
+      - name: Start Flask Server
+        run: |
+          APPNAME_ENV=test python manage.py runserver --host 127.0.0.1 --port 5000 > flask.log 2>&1 &
+
+          for i in {1..30}; do
+            if curl -s http://127.0.0.1:5000/login > /dev/null; then
+              echo "Flask server is ready"
+              break
+            fi
+            echo "Waiting for Flask server..."
+            sleep 2
+          done
+
+          if ! curl -s http://127.0.0.1:5000/login > /dev/null; then
+            echo "Flask server failed to start"
+            cat flask.log
+            exit 1
+          fi
+
       - name: Run Tests and Coverage
         run: |
           mkdir -p reports
