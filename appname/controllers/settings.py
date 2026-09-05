@@ -29,7 +29,6 @@ def account():
         db.session.add(current_user)
         db.session.commit()
 
-
     return render_template('/settings/account.html', form=form)
 
 @settings_blueprint.route('/settings/password', methods=['GET', 'POST'])

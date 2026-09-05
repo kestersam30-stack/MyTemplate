@@ -36,3 +36,25 @@ class TestLogin:
 
         assert rv.status_code == 200
         assert 'Invalid email or password' in str(rv.data)
+
+    def test_login_invalid_email_format(self, testapp):
+        """Tests that login rejects an invalid email format."""
+
+        rv = testapp.post('/login', data=dict(
+            email='not-an-email',
+            password='somepassword'
+        ), follow_redirects=True)
+
+        assert rv.status_code == 200
+        assert 'Invalid email address' in str(rv.data)
+
+    def test_login_nonexistent_user(self, testapp):
+        """Tests that login rejects an email that does not exist."""
+
+        rv = testapp.post('/login', data=dict(
+            email='doesnotexist@example.com',
+            password='somepassword'
+        ), follow_redirects=True)
+
+        assert rv.status_code == 200
+        assert 'Invalid email or password' in str(rv.data)

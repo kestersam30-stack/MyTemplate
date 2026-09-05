@@ -1,4 +1,4 @@
-name: Flask PyTest CI
+name: MyTemplate Build
 
 on:
   push:
@@ -15,22 +15,52 @@ jobs:
         python-version: [3.12, 3.13]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v4
+
+      - name: Cache pip
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install ruff bandit pytest-cov
+          python -m playwright install --with-deps chromium
 
-      - name: Run Tests
+      - name: Ruff
         run: |
-          py.test --junitxml=test-reports/results.xml --cov-report term-missing --cov=appname tests/
+          mkdir -p reports
+          ruff check . --exclude env --exclude venv --output-format json > reports/ruff.json || true
+
+      - name: Bandit
+        run: |
+          mkdir -p reports
+          bandit -r appname -f json -o reports/bandit.json || true
+
+      - name: Run Tests and Coverage
+        run: |
+          mkdir -p reports
+          pytest -q tests/ \
+            --junitxml=reports/junit.xml \
+            --cov=appname \
+            --cov-report=term-missing \
+            --cov-report=xml:reports/coverage.xml \
+            --cov-report=html:reports/htmlcov
+
+      - name: Upload Build Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports-python-${{ matrix.python-version }}
+          path: reports/

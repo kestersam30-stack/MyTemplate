@@ -13,7 +13,6 @@ stripe_blueprint = Blueprint('checkout', __name__)
 logger = logging.getLogger(__name__)
 
 
-
 @stripe_blueprint.route('/stripe', methods=['POST'])
 @csrf.exempt  # Because this request is coming over an external API
 def stripe_webhook():
@@ -46,7 +45,7 @@ def stripe_webhook():
         if status == 'cancelled' or status == 'unpaid':
             # find the sub and donwgrade the plan
             team = Team.query.filter_by(subscription_id=subscription['id']).first()
-            team.plan = 'free' # Customize to whatever you want (or lookup the plan name)
+            team.plan = 'free'  # Customize to whatever you want (or lookup the plan name)
             db.session.add(team)
             db.session.commit()
     elif event.type == 'checkout.session.completed':

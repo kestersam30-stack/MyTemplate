@@ -56,3 +56,6 @@ appname/static/public/*
 !appname/static/public/images/*
 !appname/static/public/ignite/*
 !appname/static/public/fonts/*
+
+# Build reports
+reports/

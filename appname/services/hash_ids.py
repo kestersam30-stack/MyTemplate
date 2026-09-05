@@ -2,7 +2,7 @@ from hashids import Hashids
 
 class HashIds:
     def init_app(self, app):
-        salt = app.config.get('SECRET_KEY', 'appname-hashids-secret')
+        salt = app.config.get('SECRET_KEY', 'mytemplate-hashids-secret')
         self.hashids = Hashids(min_length=5, salt=salt)
 
     def encode_id(self, id_number):

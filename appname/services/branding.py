@@ -5,14 +5,14 @@ class Branding:
         self.config = {}
 
     def init_app(self, app):
-        self.config  = app.config
+        self.config = app.config
         self.environment = app.config.get('ENV', 'prod')
 
     @property
     def name(self):
         if self.environment == "dev":
-            return "appname-dev"
-        return "appname"
+            return "MyTemplate-dev"
+        return "MyTemplate"
 
     @property
     def support_email(self):
@@ -29,11 +29,11 @@ class Branding:
 
     @property
     def website_domain(self):
-        return "appname.com"
+        return "mytemplate.com"
 
     @property
     def legal_name(self):
-        return "appname.com"
+        return "mytemplate.com"
 
     @property
     def corporate_jurisdiction(self):
