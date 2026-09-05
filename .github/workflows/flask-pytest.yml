@@ -50,7 +50,7 @@ jobs:
 
       - name: Start Flask Server
         run: |
-          APPNAME_ENV=test python manage.py server --host 127.0.0.1 --port 5000 > flask.log 2>&1 &
+          APPNAME_ENV=test python manage.py server > flask.log 2>&1 &
 
           for i in {1..30}; do
             if curl -s http://127.0.0.1:5000/login > /dev/null; then
