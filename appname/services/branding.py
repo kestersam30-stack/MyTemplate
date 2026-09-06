@@ -21,11 +21,11 @@ class Branding:
 
     @property
     def icon_path(self):
-        return "public/ignite/ignite-logo@2x.png"
+        return "public/mytemplate/mytemplate-logo.svg"
 
     @property
     def svg_icon(self):
-        return "public/ignite/ignite-icon.svg"
+        return "public/mytemplate/mytemplate-icon.svg"
 
     @property
     def website_domain(self):
@@ -41,5 +41,5 @@ class Branding:
 
     @property
     def full_logo_path(self):
-        return "public/ignite/ignite-logo@2x.png"
+        return "public/mytemplate/mytemplate-logo.svg"
 
